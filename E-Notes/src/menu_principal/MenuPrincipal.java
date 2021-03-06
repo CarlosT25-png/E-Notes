@@ -2,6 +2,7 @@
 package menu_principal;
 
 import java.awt.HeadlessException;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,8 +19,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
+        iconoFormulario();
     }
-
+    
+    public void iconoFormulario() {
+        URL url = getClass().getResource("/imagenes/logo.png");
+        ImageIcon icono_formulario = new ImageIcon(url);
+        setIconImage(icono_formulario.getImage());
+    }
    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -99,19 +106,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         PnlOpciones.add(btnAgenda, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, 30));
 
-        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnMenuPrincipal.png"))); // NOI18N
+        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InacBtnMenuPrincipal.png"))); // NOI18N
         btnMenuPrincipal.setBorder(null);
         btnMenuPrincipal.setBorderPainted(false);
         btnMenuPrincipal.setContentAreaFilled(false);
         btnMenuPrincipal.setFocusable(false);
-        btnMenuPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnMenuPrincipalMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnMenuPrincipalMouseExited(evt);
-            }
-        });
         PnlOpciones.add(btnMenuPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 160, 30));
 
         btnContactos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnContactos.png"))); // NOI18N
@@ -177,14 +176,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMenuPrincipalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseEntered
-        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/InacBtnMenuPrincipal.png")));
-    }//GEN-LAST:event_btnMenuPrincipalMouseEntered
-
-    private void btnMenuPrincipalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseExited
-        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/BtnMenuPrincipal.png")));
-    }//GEN-LAST:event_btnMenuPrincipalMouseExited
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
        System.exit(0);
