@@ -3,10 +3,18 @@ package menu_principal;
 
 import java.awt.HeadlessException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import bd.*;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -19,23 +27,100 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
-        iconoFormulario();
+        //iconoFormulario();
+        llenarTablasMP();
     }
     
     public void iconoFormulario() {
-        URL url = getClass().getResource("/imagenes/logo.png");
+        URL url = getClass().getResource("/imagenes.general/logo.png");
         ImageIcon icono_formulario = new ImageIcon(url);
         setIconImage(icono_formulario.getImage());
     }
    
+    private void llenarTablasMP(){
+        Date fechaH = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaHoyS = format.format(fechaH);
+        try {
+            String consulta = "SELECT A.NOTA,A.LUGAR,A.FECHA,A.HORA FROM AGENDA AS A WHERE A.FECHA='" + fechaHoyS + "'  AND A.NOMBRE_USUARIO='CarlosT25'";
+
+            DefaultTableModel model = new DefaultTableModel();
+            jtCitasH.setModel(model);
+
+            Statement sql = Conexion.getConnection().createStatement();
+
+            ResultSet resultado = sql.executeQuery(consulta);
+
+            ResultSetMetaData rsMd = resultado.getMetaData();
+            int cantCol = rsMd.getColumnCount();
+
+            model.addColumn("Descripción");
+            model.addColumn("Lugar");
+            model.addColumn("Fecha");
+            model.addColumn("Hora");
+
+            while (resultado.next()) {
+                Object[] filas = new Object[cantCol];
+
+                for (int i = 0; i < cantCol; i++) {
+                    filas[i] = resultado.getObject(i + 1);
+
+                }
+                model.addRow(filas);
+            }
+        } catch (Exception e) {
+        }
+
+        TableColumnModel columnModel = jtCitasH.getColumnModel();
+        
+        columnModel.getColumn(0).setPreferredWidth(215);
+        columnModel.getColumn(1).setPreferredWidth(87);
+        columnModel.getColumn(2).setPreferredWidth(70);
+        columnModel.getColumn(3).setPreferredWidth(30);
+        
+        try {
+            String consulta = "SELECT C.NOMBRE,C.TELEFONO,C.MOVIL,C.EMAIL FROM CONTACTOS AS C WHERE C.FAVORITO=1 AND NOMBRE_USUARIO='CarlosT25'";
+
+            DefaultTableModel model = new DefaultTableModel();
+            jtContactosF.setModel(model);
+
+            Statement sql = Conexion.getConnection().createStatement();
+
+            ResultSet resultado = sql.executeQuery(consulta);
+
+            ResultSetMetaData rsMd = resultado.getMetaData();
+            int cantCol = rsMd.getColumnCount();
+
+            model.addColumn("Nombre");
+            model.addColumn("Teléfono");
+            model.addColumn("Movil");
+            model.addColumn("E-mail");
+
+            while (resultado.next()) {
+                Object[] filas = new Object[cantCol];
+
+                for (int i = 0; i < cantCol; i++) {
+                    filas[i] = resultado.getObject(i + 1);
+
+                }
+                model.addRow(filas);
+            }
+        } catch (Exception e) {
+        }
+        
+        TableColumnModel columnModel2 = jtContactosF.getColumnModel();
+        
+        columnModel2.getColumn(0).setPreferredWidth(131);
+        columnModel2.getColumn(1).setPreferredWidth(70);
+        columnModel2.getColumn(2).setPreferredWidth(70);
+        columnModel2.getColumn(3).setPreferredWidth(131);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
-        txtUsuario = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         PnlOpciones = new javax.swing.JPanel();
         btnAgenda = new javax.swing.JButton();
@@ -45,6 +130,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCerrarSesion = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
         ParentPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtContactosF = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtCitasH = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -53,7 +145,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnCerrar.png"))); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnCerrar.png"))); // NOI18N
         btnSalir.setToolTipText("");
         btnSalir.setBorder(null);
         btnSalir.setBorderPainted(false);
@@ -66,15 +158,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 4, -1, -1));
 
-        txtUsuario.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        txtUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        txtUsuario.setText("USUARIO");
-        jPanel1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 4, 120, -1));
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/usuario.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 4, -1, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/BarraSuperior.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/BarraSuperior.png"))); // NOI18N
         jLabel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jLabel1MouseDragged(evt);
@@ -91,7 +175,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         PnlOpciones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 102)));
         PnlOpciones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnAgenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnAgenda.png"))); // NOI18N
+        btnAgenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnAgenda.png"))); // NOI18N
         btnAgenda.setBorder(null);
         btnAgenda.setBorderPainted(false);
         btnAgenda.setContentAreaFilled(false);
@@ -106,14 +190,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         PnlOpciones.add(btnAgenda, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, 30));
 
-        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/InacBtnMenuPrincipal.png"))); // NOI18N
+        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnMenuPrincipal.png"))); // NOI18N
         btnMenuPrincipal.setBorder(null);
         btnMenuPrincipal.setBorderPainted(false);
         btnMenuPrincipal.setContentAreaFilled(false);
         btnMenuPrincipal.setFocusable(false);
         PnlOpciones.add(btnMenuPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 160, 30));
 
-        btnContactos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnContactos.png"))); // NOI18N
+        btnContactos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnContactos.png"))); // NOI18N
         btnContactos.setToolTipText("");
         btnContactos.setBorder(null);
         btnContactos.setBorderPainted(false);
@@ -129,7 +213,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         PnlOpciones.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
 
-        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnReportes.png"))); // NOI18N
+        btnReportes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnReportes.png"))); // NOI18N
         btnReportes.setToolTipText("");
         btnReportes.setBorder(null);
         btnReportes.setBorderPainted(false);
@@ -145,7 +229,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         PnlOpciones.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
 
-        btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnCerrarSesion.png"))); // NOI18N
+        btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnCerrarSesion.png"))); // NOI18N
         btnCerrarSesion.setToolTipText("");
         btnCerrarSesion.setBorder(null);
         btnCerrarSesion.setBorderPainted(false);
@@ -161,7 +245,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         PnlOpciones.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
 
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logo.png"))); // NOI18N
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/logo.png"))); // NOI18N
         logo.setFocusable(false);
         PnlOpciones.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
@@ -169,6 +253,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         ParentPanel.setBackground(new java.awt.Color(255, 255, 255));
         ParentPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenesMenuPrincipal/¡Bienvenido a E-NOTES!.png"))); // NOI18N
+        ParentPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel3.setText("Contactos favoritos");
+        ParentPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel4.setText("Citas para el día de hoy");
+        ParentPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, -1));
+
+        jtContactosF.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Teléfono", "Móvil", "E-mail"
+            }
+        ));
+        jScrollPane1.setViewportView(jtContactosF);
+
+        ParentPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, -1, 160));
+
+        jtCitasH.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Descripción", "Lugar", "Fecha", "Hora"
+            }
+        ));
+        jScrollPane2.setViewportView(jtCitasH);
+
+        ParentPanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 160));
+
         jPanel1.add(ParentPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 590, 520));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 550));
@@ -241,7 +361,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.jLabel2 = jLabel2;
         this.jPanel1 = jPanel1;
         this.logo = logo;
-        this.txtUsuario = txtUsuario;
+        //this.txtUsuario = txtUsuario;
     }
 
     /**
@@ -288,8 +408,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jtCitasH;
+    private javax.swing.JTable jtContactosF;
     private javax.swing.JLabel logo;
-    private javax.swing.JLabel txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
