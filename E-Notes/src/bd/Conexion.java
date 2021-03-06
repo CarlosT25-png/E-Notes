@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @author carto
  */
 public class Conexion {
-    public static Connection getConexion(){
+    public static Connection getConnection(){
         String conexionUrl = "jdbc:sqlserver://localhost:1433;"
                 + "database=ENOTES;"
                 + "user=sa;"
