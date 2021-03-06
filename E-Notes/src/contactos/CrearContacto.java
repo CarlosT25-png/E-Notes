@@ -35,19 +35,20 @@ public final class CrearContacto extends javax.swing.JFrame {
         setIconImage(icono_formulario.getImage());
     }
 
-    public void GuardarContactoSQL(String nombre, String telefono, String movil, String email, String direccion){
+    public void GuardarContactoSQL(String nombre, String telefono, String movil, String email, String direccion, int favorito){
         ResultSet res;
         PreparedStatement stm;
         
         try {
-            Connection conexionBD = bd.Conexion.getConexion();
-            String consulta = "INSERT INTO contactos (nombre,telefono,movil,email,direccion) VALUES (?,?,?,?,?)";
+            Connection conexionBD = bd.Conexion.getConnection();
+            String consulta = "INSERT INTO contactos (nombre,telefono,movil,email,direccion,favorito) VALUES (?,?,?,?,?,?)";
             stm = conexionBD.prepareStatement(consulta);
             stm.setString(1, nombre);
             stm.setString(2, telefono);
             stm.setString(3, movil);
             stm.setString(4, email);
             stm.setString(5, direccion);
+            stm.setInt(6, favorito);
             
             int i = stm.executeUpdate();
             
@@ -71,15 +72,15 @@ public final class CrearContacto extends javax.swing.JFrame {
         
     }
     public void limpiar(){
-        txtNombre.setText("");
-        txtDireccion.setText("");
-        txtEmail.setText("");
         txtMovil.setText("");
-        txtTelefono.setText("");
+        txtDireccion.setText("");
+        txtMovil.setText("");
+        txtMovil.setText("");
+        txtMovil.setText("");
     }
     
     public void validacion(){
-        if(txtNombre.getText().isEmpty() || txtDireccion.getText().isEmpty() || txtEmail.getText().isEmpty() || txtMovil.getText().isEmpty() || txtTelefono.getText().isEmpty()){
+        if(txtMovil.getText().isEmpty() || txtDireccion.getText().isEmpty() || txtMovil.getText().isEmpty() || txtMovil.getText().isEmpty() || txtMovil.getText().isEmpty()){
             btnGuardarContacto.setEnabled(false);
         }else{
             btnGuardarContacto.setEnabled(true);
@@ -106,11 +107,12 @@ public final class CrearContacto extends javax.swing.JFrame {
         borde = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
+        txtMovil = new javax.swing.JTextField();
+        btnFav = new javax.swing.JButton();
+        txtEmail = new javax.swing.JTextField();
+        txtDireccion = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
-        txtDireccion = new javax.swing.JTextField();
-        txtMovil = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(51, 51, 51));
@@ -134,27 +136,27 @@ public final class CrearContacto extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
         jLabel3.setText("Nombre:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(51, 51, 51));
         jLabel4.setText("Telefono:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(51, 51, 51));
         jLabel5.setText("Movil:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(51, 51, 51));
         jLabel7.setText("Email:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 160, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 51));
         jLabel8.setText("Direccion:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
         btnLimpiarContacto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnLimpiar.png"))); // NOI18N
         btnLimpiarContacto.setBorder(null);
@@ -218,36 +220,12 @@ public final class CrearContacto extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        borde.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(589, 6, -1, -1));
+        borde.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, -1, -1));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/contactos/contactoIcon.png"))); // NOI18N
         borde.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jPanel1.add(borde, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 620, 40));
-
-        txtNombre.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNombreKeyReleased(evt);
-            }
-        });
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 190, 30));
-
-        txtTelefono.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtTelefonoKeyReleased(evt);
-            }
-        });
-        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 190, 30));
-
-        txtDireccion.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
-        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDireccionKeyReleased(evt);
-            }
-        });
-        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 470, 30));
+        jPanel1.add(borde, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 650, 40));
 
         txtMovil.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         txtMovil.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -255,7 +233,18 @@ public final class CrearContacto extends javax.swing.JFrame {
                 txtMovilKeyReleased(evt);
             }
         });
-        jPanel1.add(txtMovil, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 190, 30));
+        jPanel1.add(txtMovil, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 220, 40));
+
+        btnFav.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnFav.png"))); // NOI18N
+        btnFav.setBorder(null);
+        btnFav.setBorderPainted(false);
+        btnFav.setContentAreaFilled(false);
+        btnFav.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFavMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btnFav, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
         txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -263,17 +252,41 @@ public final class CrearContacto extends javax.swing.JFrame {
                 txtEmailKeyReleased(evt);
             }
         });
-        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, 190, 30));
+        jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 160, 220, 40));
+
+        txtDireccion.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyReleased(evt);
+            }
+        });
+        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 500, 40));
+
+        txtNombre.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNombreKeyReleased(evt);
+            }
+        });
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 200, 40));
+
+        txtTelefono.setFont(new java.awt.Font("Segoe UI Historic", 0, 18)); // NOI18N
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyReleased(evt);
+            }
+        });
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 160, 200, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
         );
 
         pack();
@@ -325,16 +338,35 @@ public final class CrearContacto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarContactoActionPerformed
 
     private void btnGuardarContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarContactoActionPerformed
-        GuardarContactoSQL(txtNombre.getText(), txtTelefono.getText(), txtMovil.getText(), txtEmail.getText(), txtDireccion.getText());
+        GuardarContactoSQL(txtNombre.getText(), txtTelefono.getText(), txtMovil.getText(), txtEmail.getText(), txtDireccion.getText(),fav);
     }//GEN-LAST:event_btnGuardarContactoActionPerformed
 
-    private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
+    private void txtMovilKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMovilKeyReleased
         validacion();
-    }//GEN-LAST:event_txtDireccionKeyReleased
+    }//GEN-LAST:event_txtMovilKeyReleased
+    
+    int fav=0,inicio=0;
+
+    private void btnFavMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFavMouseClicked
+        if(inicio==0){
+            btnFav.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/BtnFav.png")));
+            fav = 1;
+            inicio=1;
+        }else{
+            btnFav.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnFav.png")));
+            inicio=0;
+            fav=0;
+        }
+        
+    }//GEN-LAST:event_btnFavMouseClicked
 
     private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
         validacion();
     }//GEN-LAST:event_txtEmailKeyReleased
+
+    private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
+        validacion();
+    }//GEN-LAST:event_txtDireccionKeyReleased
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
         validacion();
@@ -343,10 +375,6 @@ public final class CrearContacto extends javax.swing.JFrame {
     private void txtTelefonoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyReleased
         validacion();
     }//GEN-LAST:event_txtTelefonoKeyReleased
-
-    private void txtMovilKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMovilKeyReleased
-        validacion();
-    }//GEN-LAST:event_txtMovilKeyReleased
 
     /**
      * @param args the command line arguments
@@ -385,6 +413,7 @@ public final class CrearContacto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel borde;
+    private javax.swing.JButton btnFav;
     private javax.swing.JButton btnGuardarContacto;
     private javax.swing.JButton btnLimpiarContacto;
     private javax.swing.JButton btnSalir;

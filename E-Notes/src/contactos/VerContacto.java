@@ -5,11 +5,6 @@
  */
 package contactos;
 
-import static contactos.ModificarContacto.txtDireccion;
-import static contactos.ModificarContacto.txtEmail;
-import static contactos.ModificarContacto.txtMovil;
-import static contactos.ModificarContacto.txtNombre;
-import static contactos.ModificarContacto.txtTelefono;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
@@ -148,23 +143,23 @@ public final class VerContacto extends javax.swing.JFrame {
 
         lblDireccion.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
         lblDireccion.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(lblDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 480, 20));
+        jPanel1.add(lblDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 510, 30));
 
         lblNombre.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 200, 20));
+        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 200, 30));
 
         lblEmail.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
         lblEmail.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 150, 190, 20));
+        jPanel1.add(lblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 150, 220, 30));
 
         lblTelefono.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(lblTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 190, 20));
+        jPanel1.add(lblTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 190, 30));
 
         lblMovil.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
         lblMovil.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel1.add(lblMovil, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 90, 190, 20));
+        jPanel1.add(lblMovil, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 90, 220, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

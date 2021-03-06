@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  *
  * @author carto
  */
+
 public class Conexion {
     public static Connection getConnection(){
         String conexionUrl = "jdbc:sqlserver://localhost:1433;"
@@ -36,7 +37,7 @@ public class Conexion {
     public static ResultSet Consulta(String consulta){
         try {
             String query = consulta;
-            Connection con = getConexion();
+            Connection con = getConnection();
             Statement stm = con.createStatement();
             ResultSet rs = stm.executeQuery(query);
             
@@ -47,8 +48,5 @@ public class Conexion {
             "Error de Conexion",JOptionPane.ERROR_MESSAGE);
         }
         return null;
-    }
-
-
-   
+    }  
 }

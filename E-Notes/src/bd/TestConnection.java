@@ -45,7 +45,7 @@ public class TestConnection extends javax.swing.JFrame {
         String bases = "";
         
         try {
-            Statement sql = Conexion.getConexion().createStatement();
+            Statement sql = Conexion.getConnection().createStatement();
             
             String consulta = "SELECT  * FROM CONTACTOS";
             ResultSet resultado = sql.executeQuery(consulta);

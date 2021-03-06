@@ -12,8 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -82,13 +80,13 @@ public final class Contactos extends javax.swing.JFrame {
                 tabla.addRow(v);
             }
             tblContactos.setModel(tabla);
-            Conexion.getConexion().close();
+            Conexion.getConnection().close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         } finally {
             try {
-                Conexion.getConexion().close();
+                Conexion.getConnection().close();
             } catch (SQLException e) {
             }
         }
@@ -109,13 +107,13 @@ public final class Contactos extends javax.swing.JFrame {
                 lblImgBuscar.setIcon(rojo);   
             }
             
-            Conexion.getConexion().close();
+            Conexion.getConnection().close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         } finally {
             try {
-                Conexion.getConexion().close();
+                Conexion.getConnection().close();
             } catch (SQLException e) {
             }
         }
@@ -128,7 +126,7 @@ public final class Contactos extends javax.swing.JFrame {
             String valor = tblContactos.getValueAt(fila, 0).toString();
             
             try {
-                PreparedStatement elim = Conexion.getConexion().prepareStatement("DELETE FROM contactos WHERE Nombre = '"+valor+"'");
+                PreparedStatement elim = Conexion.getConnection().prepareStatement("DELETE FROM contactos WHERE Nombre = '"+valor+"'");
                 int a = elim.executeUpdate();
                 if(a>0){
                     JOptionPane.showMessageDialog(null,"Contacto eliminado satisfatcoriamente","Information",JOptionPane.INFORMATION_MESSAGE);
@@ -136,13 +134,13 @@ public final class Contactos extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null,"No se pudo eliminar el contacto","Error",JOptionPane.ERROR_MESSAGE);
                 }
                 cargarDatos();
-                Conexion.getConexion().close();
+                Conexion.getConnection().close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e);
         } finally {
             try {
-                Conexion.getConexion().close();
+                Conexion.getConnection().close();
             } catch (SQLException e) {
             }
         }
@@ -567,7 +565,7 @@ public final class Contactos extends javax.swing.JFrame {
         String telefono = tblContactos.getValueAt(fila, 2).toString();
 
         try {
-                Connection con = Conexion.getConexion();
+                Connection con = Conexion.getConnection();
                 PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL from contactos WHERE MOVIL = '"+movil+"'");
                 ResultSet ress = stm.executeQuery();
                 while(ress.next()){
@@ -604,7 +602,7 @@ public final class Contactos extends javax.swing.JFrame {
         String telefono = tblContactos.getValueAt(fila, 2).toString();
 
         try {
-                Connection con = Conexion.getConexion();
+                Connection con = Conexion.getConnection();
                 PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL,IDCONTACTO from contactos WHERE MOVIL = '"+movil+"'");
                 ResultSet ress = stm.executeQuery();
                 while(ress.next()){
