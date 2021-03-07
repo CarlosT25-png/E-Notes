@@ -14,7 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import bd.*;
+import contactos.Contactos;
+import java.sql.SQLException;
 import javax.swing.table.TableColumnModel;
+import login.Login;
 
 /**
  *
@@ -28,7 +31,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         initComponents();
         //iconoFormulario();
-        llenarTablasMP();
     }
     
     public void iconoFormulario() {
@@ -36,13 +38,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         ImageIcon icono_formulario = new ImageIcon(url);
         setIconImage(icono_formulario.getImage());
     }
-   
-    private void llenarTablasMP(){
+
+    String userr;
+    public void llenarTablasMP(String usuario){
         Date fechaH = new Date();
+        userr = usuario;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String fechaHoyS = format.format(fechaH);
         try {
-            String consulta = "SELECT A.NOTA,A.LUGAR,A.FECHA,A.HORA FROM AGENDA AS A WHERE A.FECHA='" + fechaHoyS + "'  AND A.NOMBRE_USUARIO='CarlosT25'";
+            String consulta = "SELECT A.NOTA,A.LUGAR,A.FECHA,A.HORA FROM AGENDA AS A WHERE A.FECHA='" + fechaHoyS + "'  AND A.NOMBRE_USUARIO='"+usuario+"'";
 
             DefaultTableModel model = new DefaultTableModel();
             jtCitasH.setModel(model);
@@ -68,7 +72,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 }
                 model.addRow(filas);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
 
         TableColumnModel columnModel = jtCitasH.getColumnModel();
@@ -79,7 +83,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         columnModel.getColumn(3).setPreferredWidth(30);
         
         try {
-            String consulta = "SELECT C.NOMBRE,C.TELEFONO,C.MOVIL,C.EMAIL FROM CONTACTOS AS C WHERE C.FAVORITO=1 AND NOMBRE_USUARIO='CarlosT25'";
+            String consulta = "SELECT C.NOMBRE,C.TELEFONO,C.MOVIL,C.EMAIL FROM CONTACTOS AS C WHERE C.FAVORITO=1 AND NOMBRE_USUARIO='"+usuario+"'";
 
             DefaultTableModel model = new DefaultTableModel();
             jtContactosF.setModel(model);
@@ -105,7 +109,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 }
                 model.addRow(filas);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         
         TableColumnModel columnModel2 = jtContactosF.getColumnModel();
@@ -188,9 +192,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 btnAgendaMouseExited(evt);
             }
         });
+        btnAgenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaActionPerformed(evt);
+            }
+        });
         PnlOpciones.add(btnAgenda, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, 30));
 
-        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnMenuPrincipal.png"))); // NOI18N
+        btnMenuPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/InacBtnMenuPrincipal.png"))); // NOI18N
         btnMenuPrincipal.setBorder(null);
         btnMenuPrincipal.setBorderPainted(false);
         btnMenuPrincipal.setContentAreaFilled(false);
@@ -209,6 +218,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnContactosMouseExited(evt);
+            }
+        });
+        btnContactos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContactosActionPerformed(evt);
             }
         });
         PnlOpciones.add(btnContactos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
@@ -241,6 +255,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnCerrarSesionMouseExited(evt);
+            }
+        });
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
             }
         });
         PnlOpciones.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
@@ -316,36 +335,53 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MousePressed
 
     private void btnAgendaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseEntered
-        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/InacBtnAgenda.png")));
+        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnAgenda.png")));
     }//GEN-LAST:event_btnAgendaMouseEntered
 
     private void btnAgendaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseExited
-        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/BtnAgenda.png")));
+        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnAgenda.png")));
     }//GEN-LAST:event_btnAgendaMouseExited
 
     private void btnContactosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactosMouseEntered
-        btnContactos.setIcon(new ImageIcon(getClass().getResource("/imagenes/InacBtnContactos.png")));
+        btnContactos.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnContactos.png")));
     }//GEN-LAST:event_btnContactosMouseEntered
 
     private void btnContactosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactosMouseExited
-        btnContactos.setIcon(new ImageIcon(getClass().getResource("/imagenes/BtnContactos.png")));
+        btnContactos.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnContactos.png")));
     }//GEN-LAST:event_btnContactosMouseExited
 
     private void btnReportesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseEntered
-        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/InacBtnReportes.png")));
+        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnReportes.png")));
     }//GEN-LAST:event_btnReportesMouseEntered
 
     private void btnReportesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseExited
-        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/BtnReportes.png")));
+        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnReportes.png")));
     }//GEN-LAST:event_btnReportesMouseExited
 
     private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
-        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/InacBtnCerrarSesion.png")));
+        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnCerrarSesion.png")));
     }//GEN-LAST:event_btnCerrarSesionMouseEntered
 
     private void btnCerrarSesionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseExited
-        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/BtnCerrarSesion.png")));
+        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnCerrarSesion.png")));
     }//GEN-LAST:event_btnCerrarSesionMouseExited
+
+    private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaActionPerformed
+        
+    }//GEN-LAST:event_btnAgendaActionPerformed
+
+    private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
+        Contactos cont = new Contactos();
+        cont.setVisible(true);
+        cont.cargarDatos(userr);
+        this.dispose();
+    }//GEN-LAST:event_btnContactosActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        Login login = new Login();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
                                         
     public MenuPrincipal(JPanel ParentPanel, JPanel PnlOpciones, JButton btnAgenda, JButton btnCerrarSesion, JButton btnContactos, JButton btnMenuPrincipal, JButton btnReportes, JButton btnSalir, JLabel jLabel1, JLabel jLabel2, JPanel jPanel1, JLabel logo, JLabel txtUsuario) throws HeadlessException {

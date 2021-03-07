@@ -93,7 +93,7 @@ public class Login extends javax.swing.JFrame {
                 btnCerrarActionPerformed(evt);
             }
         });
-        topHead.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, -1, -1));
+        topHead.add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
 
         btnIngresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenesLogin/btnIngresarActivo.png"))); // NOI18N
         btnIngresar.setBorderPainted(false);
@@ -131,7 +131,6 @@ public class Login extends javax.swing.JFrame {
 
         jpsPass.setText("$$$$$$$$$$$$$");
         jpsPass.setBorder(null);
-        jpsPass.setEchoChar('\u2022');
         jpsPass.setOpaque(false);
         jpsPass.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -345,6 +344,7 @@ public class Login extends javax.swing.JFrame {
                 if(resul==1){
                     MenuPrincipal ventana = new MenuPrincipal();
                     ventana.setVisible(true);
+                    ventana.llenarTablasMP(nUsuario);
                     this.dispose();
                 }else{
                     JOptionPane.showMessageDialog(null, "Datos de la cuenta invalidos");

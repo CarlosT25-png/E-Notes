@@ -6,6 +6,7 @@
 package contactos;
 
 import bd.Conexion;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import login.Login;
+import menu_principal.MenuPrincipal;
 
 /**
  *
@@ -28,7 +31,6 @@ public final class Contactos extends javax.swing.JFrame {
     public Contactos() {
         initComponents();
         iconoFormulario();
-        cargarDatos();
     }
     
     DefaultTableModel tabla;
@@ -45,11 +47,12 @@ public final class Contactos extends javax.swing.JFrame {
         setIconImage(icono_formulario.getImage());
     }
     
-    
-    public void cargarDatos(){
+    String usuario;
+    public void cargarDatos(String user){
         tabla = (DefaultTableModel) tblContactos.getModel();
+        usuario = user;
         tabla.setRowCount(0);
-        res = bd.Conexion.Consulta("select Nombre,Movil,Telefono from contactos");
+        res = bd.Conexion.Consulta("select Nombre,Movil,Telefono from contactos where NOMBRE_USUARIO = '"+user+"'");
         try {
             while(res.next()){
                 Vector vec = new Vector();
@@ -70,7 +73,7 @@ public final class Contactos extends javax.swing.JFrame {
         tabla = new DefaultTableModel(null, columnas);
 
         try {
-            res = Conexion.Consulta("SELECT Nombre, Movil, Telefono FROM contactos WHERE Nombre LIKE '"+nombre+"%'");
+            res = Conexion.Consulta("SELECT Nombre, Movil, Telefono FROM contactos WHERE Nombre LIKE '"+nombre+"%' and NOMBRE_USUARIO = '"+usuario+"'");
 
             while (res.next()) {
                 Vector v = new Vector();
@@ -97,7 +100,7 @@ public final class Contactos extends javax.swing.JFrame {
         tabla = new DefaultTableModel(null, columnas);
 
         try {
-            res = Conexion.Consulta("SELECT Nombre, Movil, Telefono FROM contactos WHERE Nombre LIKE '"+nombre+"%'");
+            res = Conexion.Consulta("SELECT Nombre, Movil, Telefono FROM contactos WHERE Nombre LIKE '"+nombre+"%' and NOMBRE_USUARIO = '"+usuario+"'");
 
             if(res.next()) {
                 lbltxtBuscar.setText("Resultados posibles");
@@ -126,14 +129,14 @@ public final class Contactos extends javax.swing.JFrame {
             String valor = tblContactos.getValueAt(fila, 0).toString();
             
             try {
-                PreparedStatement elim = Conexion.getConnection().prepareStatement("DELETE FROM contactos WHERE Nombre = '"+valor+"'");
+                PreparedStatement elim = Conexion.getConnection().prepareStatement("DELETE FROM contactos WHERE Nombre = '"+valor+"'and NOMBRE_USUARIO = '"+usuario+"'");
                 int a = elim.executeUpdate();
                 if(a>0){
                     JOptionPane.showMessageDialog(null,"Contacto eliminado satisfatcoriamente","Information",JOptionPane.INFORMATION_MESSAGE);
                 }else{
                     JOptionPane.showMessageDialog(null,"No se pudo eliminar el contacto","Error",JOptionPane.ERROR_MESSAGE);
                 }
-                cargarDatos();
+                cargarDatos(usuario);
                 Conexion.getConnection().close();
 
         } catch (SQLException e) {
@@ -207,7 +210,7 @@ public final class Contactos extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/BarraSuperior.png"))); // NOI18N
         jLabel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jLabel1MouseDragged(evt);
+                jLabel1MouseDragge(evt);
             }
         });
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -249,6 +252,11 @@ public final class Contactos extends javax.swing.JFrame {
                 btnMenuPrincipalMouseExited(evt);
             }
         });
+        btnMenuPrincipal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuPrincipalActionPerformed(evt);
+            }
+        });
         PnlOpciones.add(btnMenuPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 160, 30));
 
         btnContactos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/InacBtnContactos.png"))); // NOI18N
@@ -287,6 +295,11 @@ public final class Contactos extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnCerrarSesionMouseExited(evt);
+            }
+        });
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
             }
         });
         PnlOpciones.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
@@ -444,88 +457,48 @@ public final class Contactos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_btnSalirActionPerformed
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        ModificarContacto modi = new ModificarContacto();
+        int fila = tblContactos.getSelectedRow();
+        String nombre = tblContactos.getValueAt(fila, 0).toString();
+        String movil = tblContactos.getValueAt(fila, 1).toString();
+        String telefono = tblContactos.getValueAt(fila, 2).toString();
 
-    //Para poder arrastrar el frame
-    private void jLabel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseDragged
-        int x = evt.getXOnScreen();
-        int y = evt.getYOnScreen();
+        try {
+            Connection con = Conexion.getConnection();
+            PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL,IDCONTACTO from contactos WHERE MOVIL = '"+movil+"' and NOMBRE_USUARIO = '"+usuario+"'");
+            ResultSet ress = stm.executeQuery();
+            while(ress.next()){
+                String direccion = ress.getString("DIRECCION");
+                String email = ress.getString("EMAIL");
+                String id = ress.getString("IDCONTACTO");
+                modi.rellenar(nombre, telefono, movil, direccion, email,id,usuario);
+                modi.validacion();
+            }
 
-        this.setLocation(x - xx, y - xy);
-    }//GEN-LAST:event_jLabel1MouseDragged
-    
-    int xx,xy;
-    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
-        xx = evt.getX();
-        xy = evt.getY();
-    }//GEN-LAST:event_jLabel1MousePressed
-
-    private void btnAgendaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseEntered
-        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnAgenda.png")));
-    }//GEN-LAST:event_btnAgendaMouseEntered
-
-    private void btnAgendaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseExited
-        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnAgenda.png")));
-    }//GEN-LAST:event_btnAgendaMouseExited
-
-    private void btnMenuPrincipalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseEntered
-        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnMenuPrincipal.png")));
-    }//GEN-LAST:event_btnMenuPrincipalMouseEntered
-
-    private void btnMenuPrincipalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseExited
-        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnMenuPrincipal.png")));
-    }//GEN-LAST:event_btnMenuPrincipalMouseExited
-
-    private void btnReportesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseEntered
-        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnReportes.png")));
-    }//GEN-LAST:event_btnReportesMouseEntered
-
-    private void btnReportesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseExited
-        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnReportes.png")));
-    }//GEN-LAST:event_btnReportesMouseExited
-
-    private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
-        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnCerrarSesion.png")));
-    }//GEN-LAST:event_btnCerrarSesionMouseEntered
-
-    private void btnCerrarSesionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseExited
-        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnCerrarSesion.png")));
-    }//GEN-LAST:event_btnCerrarSesionMouseExited
-
-    private void btnCrearContactoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearContactoMouseEntered
-        btnCrearContacto.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnCrearContacto.png")));
-    }//GEN-LAST:event_btnCrearContactoMouseEntered
-
-    private void btnCrearContactoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearContactoMouseExited
-        btnCrearContacto.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/BtnCrearContacto.png")));
-    }//GEN-LAST:event_btnCrearContactoMouseExited
-
-    private void btnVerMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseEntered
-        if(btnVer.isEnabled()){
-            btnVer.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnVer.png")));
+            modi.setVisible(true);
+            this.dispose();
+        }catch (SQLException e) {
+            System.out.println("Error: "+e);
         }
-    }//GEN-LAST:event_btnVerMouseEntered
 
-    private void btnVerMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseExited
-        if(btnVer.isEnabled()){
-            btnVer.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/BtnVer.png")));
-        }
-    }//GEN-LAST:event_btnVerMouseExited
+    }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
-        if(btnEliminar.isEnabled()){
-           btnEliminar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnEliminar.png")));
+    private void btnModificarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseExited
+        if(btnModificar.isEnabled()){
+            btnModificar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnModificar.png")));
         }
-       
-    }//GEN-LAST:event_btnEliminarMouseEntered
+    }//GEN-LAST:event_btnModificarMouseExited
 
-    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
-        if(btnEliminar.isEnabled()){
-            btnEliminar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/btnEliminar.png")));
+    private void btnModificarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseEntered
+        if(btnModificar.isEnabled()){
+            btnModificar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnModificar.png")));
         }
-    }//GEN-LAST:event_btnEliminarMouseExited
+    }//GEN-LAST:event_btnModificarMouseEntered
+
+    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarMouseClicked
 
     private void txtBuscarContactoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarContactoKeyReleased
         busqueda_filtrada(txtBuscarContacto.getText());
@@ -534,12 +507,6 @@ public final class Contactos extends javax.swing.JFrame {
             limpiar();
         }
     }//GEN-LAST:event_txtBuscarContactoKeyReleased
-
-    private void btnCrearContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearContactoActionPerformed
-        CrearContacto crear = new CrearContacto();
-        crear.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCrearContactoActionPerformed
 
     private void tblContactosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblContactosMouseClicked
         if(tblContactos.isColumnSelected(0)){
@@ -557,6 +524,19 @@ public final class Contactos extends javax.swing.JFrame {
         EliminarContacto();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnEliminarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseExited
+        if(btnEliminar.isEnabled()){
+            btnEliminar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/btnEliminar.png")));
+        }
+    }//GEN-LAST:event_btnEliminarMouseExited
+
+    private void btnEliminarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseEntered
+        if(btnEliminar.isEnabled()){
+            btnEliminar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnEliminar.png")));
+        }
+
+    }//GEN-LAST:event_btnEliminarMouseEntered
+
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
         VerContacto ver = new VerContacto();
         int fila = tblContactos.getSelectedRow();
@@ -565,67 +545,113 @@ public final class Contactos extends javax.swing.JFrame {
         String telefono = tblContactos.getValueAt(fila, 2).toString();
 
         try {
-                Connection con = Conexion.getConnection();
-                PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL from contactos WHERE MOVIL = '"+movil+"'");
-                ResultSet ress = stm.executeQuery();
-                while(ress.next()){
-                    String direccion = ress.getString("DIRECCION");
-                    String email = ress.getString("EMAIL");
-                    ver.rellenar(nombre, telefono, movil, direccion, email);
-                }
-                
-                ver.setVisible(true);
-                this.dispose();
-            }catch (SQLException e) {
+            Connection con = Conexion.getConnection();
+            PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL from contactos WHERE MOVIL = '"+movil+"'and NOMBRE_USUARIO = '"+usuario+"'");
+            ResultSet ress = stm.executeQuery();
+            while(ress.next()){
+                String direccion = ress.getString("DIRECCION");
+                String email = ress.getString("EMAIL");
+                ver.rellenar(nombre, telefono, movil, direccion, email,usuario);
+            }
+
+            ver.setVisible(true);
+            this.dispose();
+        }catch (SQLException e) {
             System.out.println("Error: "+e);
         }
-        
+
     }//GEN-LAST:event_btnVerActionPerformed
 
-    private void btnModificarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseEntered
-        if(btnModificar.isEnabled()){
-            btnModificar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnModificar.png")));
+    private void btnVerMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseExited
+        if(btnVer.isEnabled()){
+            btnVer.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/BtnVer.png")));
         }
-    }//GEN-LAST:event_btnModificarMouseEntered
+    }//GEN-LAST:event_btnVerMouseExited
 
-    private void btnModificarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseExited
-        if(btnModificar.isEnabled()){
-            btnModificar.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnModificar.png")));
+    private void btnVerMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVerMouseEntered
+        if(btnVer.isEnabled()){
+            btnVer.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnVer.png")));
         }
-    }//GEN-LAST:event_btnModificarMouseExited
+    }//GEN-LAST:event_btnVerMouseEntered
 
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        ModificarContacto modi = new ModificarContacto();
-        int fila = tblContactos.getSelectedRow();
-        String nombre = tblContactos.getValueAt(fila, 0).toString();
-        String movil = tblContactos.getValueAt(fila, 1).toString();
-        String telefono = tblContactos.getValueAt(fila, 2).toString();
+    private void btnCrearContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearContactoActionPerformed
+        CrearContacto crear = new CrearContacto();
+        crear.getuser(usuario);
+        crear.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCrearContactoActionPerformed
 
-        try {
-                Connection con = Conexion.getConnection();
-                PreparedStatement stm = con.prepareStatement("select DIRECCION,EMAIL,IDCONTACTO from contactos WHERE MOVIL = '"+movil+"'");
-                ResultSet ress = stm.executeQuery();
-                while(ress.next()){
-                    String direccion = ress.getString("DIRECCION");
-                    String email = ress.getString("EMAIL");
-                    String id = ress.getString("IDCONTACTO");
-                    modi.rellenar(nombre, telefono, movil, direccion, email,id);
-                    modi.validacion();
-                }
-                
-                modi.setVisible(true);
-                this.dispose();
-            }catch (SQLException e) {
-            System.out.println("Error: "+e);
-        }
-        
-        
-    }//GEN-LAST:event_btnModificarActionPerformed
+    private void btnCrearContactoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearContactoMouseExited
+        btnCrearContacto.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/BtnCrearContacto.png")));
+    }//GEN-LAST:event_btnCrearContactoMouseExited
 
-    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModificarMouseClicked
+    private void btnCrearContactoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCrearContactoMouseEntered
+        btnCrearContacto.setIcon(new ImageIcon(getClass().getResource("/imagenes/contactos/InacBtnCrearContacto.png")));
+    }//GEN-LAST:event_btnCrearContactoMouseEntered
 
+    private void btnCerrarSesionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseExited
+        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnCerrarSesion.png")));
+    }//GEN-LAST:event_btnCerrarSesionMouseExited
+
+    private void btnCerrarSesionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseEntered
+        btnCerrarSesion.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnCerrarSesion.png")));
+    }//GEN-LAST:event_btnCerrarSesionMouseEntered
+
+    private void btnReportesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseExited
+        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnReportes.png")));
+    }//GEN-LAST:event_btnReportesMouseExited
+
+    private void btnReportesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseEntered
+        btnReportes.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnReportes.png")));
+    }//GEN-LAST:event_btnReportesMouseEntered
+
+    private void btnMenuPrincipalMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseExited
+        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnMenuPrincipal.png")));
+    }//GEN-LAST:event_btnMenuPrincipalMouseExited
+
+    private void btnMenuPrincipalMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuPrincipalMouseEntered
+        btnMenuPrincipal.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnMenuPrincipal.png")));
+    }//GEN-LAST:event_btnMenuPrincipalMouseEntered
+
+    private void btnAgendaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseExited
+        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/BtnAgenda.png")));
+    }//GEN-LAST:event_btnAgendaMouseExited
+
+    private void btnAgendaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgendaMouseEntered
+        btnAgenda.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/InacBtnAgenda.png")));
+    }//GEN-LAST:event_btnAgendaMouseEntered
+
+    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
+        xx = evt.getX();
+        xy = evt.getY();
+    }//GEN-LAST:event_jLabel1MousePressed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void jLabel1MouseDragge(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseDragge
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x - xx, y - xy);
+    }//GEN-LAST:event_jLabel1MouseDragge
+
+    private void btnMenuPrincipalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuPrincipalActionPerformed
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setVisible(true);
+        menu.llenarTablasMP(usuario);
+        this.dispose();
+    }//GEN-LAST:event_btnMenuPrincipalActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        Login login = new Login();
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+   
+    int xx,xy;
     /**
      * @param args the command line arguments
      */

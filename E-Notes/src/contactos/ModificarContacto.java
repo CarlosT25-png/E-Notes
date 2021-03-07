@@ -29,13 +29,16 @@ public final class ModificarContacto extends javax.swing.JFrame {
         validacion();
     }
     
-    public void rellenar(String nombre, String telefono, String movil, String direccion, String email, String id){
+    String usuario;
+    
+    public void rellenar(String nombre, String telefono, String movil, String direccion, String email, String id, String user){
         txtNombre.setText(nombre);
         txtTelefono.setText(telefono);
         txtMovil.setText(movil);
         txtDireccion.setText(direccion);
         txtEmail.setText(email);
         txtID.setText(id);
+        usuario = user;
         
     }
     
@@ -66,15 +69,16 @@ public final class ModificarContacto extends javax.swing.JFrame {
         PreparedStatement sentencia_preparada;
         Connection conn = Conexion.getConnection();
         try {
-            String consulta = "UPDATE contactos SET nombre = ? , direccion = ?, telefono = ?, movil = ?, email = ?, favorito = ? WHERE IDCONTACTO = ?";
+            String consulta = "UPDATE contactos SET nombre = ? , direccion = ?, telefono = ?, movil = ?, email = ?, NOMBRE_USUARIO = ?, favorito = ? WHERE IDCONTACTO = ? and NOMBRE_USUARIO = '"+usuario+"'";
             sentencia_preparada = conn.prepareStatement(consulta);
             sentencia_preparada.setString(1, nombre);
             sentencia_preparada.setString(2, direccion);
             sentencia_preparada.setString(3, telefono);
             sentencia_preparada.setString(4, movil);
             sentencia_preparada.setString(5, email);
-            sentencia_preparada.setInt(6, fav);
-            sentencia_preparada.setString(7, idcontacto);
+            sentencia_preparada.setString(6, usuario);
+            sentencia_preparada.setInt(7, fav);
+            sentencia_preparada.setString(8, idcontacto);
             
             int i = sentencia_preparada.executeUpdate();
             
@@ -335,14 +339,14 @@ public final class ModificarContacto extends javax.swing.JFrame {
         Contactos cont = new Contactos();
         cont.setVisible(true);
         this.dispose();
-        cont.cargarDatos();
+        cont.cargarDatos(usuario);
     }//GEN-LAST:event_btnGuardarContactoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Contactos cont = new Contactos();
         cont.setVisible(true);
         this.dispose();
-        cont.cargarDatos();
+        cont.cargarDatos(usuario);
     }//GEN-LAST:event_jButton1ActionPerformed
     
     //Metodos para arrastrar el frame

@@ -29,12 +29,15 @@ public final class VerContacto extends javax.swing.JFrame {
         setIconImage(icono_formulario.getImage()); 
     }
     
-     public void rellenar(String nombre, String telefono, String movil, String direccion, String email){
+    String usuario;
+    
+     public void rellenar(String nombre, String telefono, String movil, String direccion, String email,String user){
         lblNombre.setText(nombre);
         lblTelefono.setText(telefono);
         lblMovil.setText(movil);
         lblDireccion.setText(direccion);
-        lblEmail.setText(email);    
+        lblEmail.setText(email);   
+        usuario = user;
     }
     
     @SuppressWarnings("unchecked")
@@ -165,11 +168,11 @@ public final class VerContacto extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -180,7 +183,7 @@ public final class VerContacto extends javax.swing.JFrame {
         Contactos cont = new Contactos();
         cont.setVisible(true);
         this.dispose();
-        cont.cargarDatos();
+        cont.cargarDatos(usuario);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     int xx,xy;

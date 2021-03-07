@@ -34,6 +34,12 @@ public final class CrearContacto extends javax.swing.JFrame {
         ImageIcon icono_formulario = new ImageIcon(url);
         setIconImage(icono_formulario.getImage());
     }
+    
+    String usuario;
+    
+    public void getuser(String user){
+        usuario = user;
+    }
 
     public void GuardarContactoSQL(String nombre, String telefono, String movil, String email, String direccion, int favorito){
         ResultSet res;
@@ -41,14 +47,15 @@ public final class CrearContacto extends javax.swing.JFrame {
         
         try {
             Connection conexionBD = bd.Conexion.getConnection();
-            String consulta = "INSERT INTO contactos (nombre,telefono,movil,email,direccion,favorito) VALUES (?,?,?,?,?,?)";
+            String consulta = "INSERT INTO contactos (nombre,telefono,movil,email,direccion,nombre_usuario,favorito) VALUES (?,?,?,?,?,?,?)";
             stm = conexionBD.prepareStatement(consulta);
             stm.setString(1, nombre);
             stm.setString(2, telefono);
             stm.setString(3, movil);
             stm.setString(4, email);
             stm.setString(5, direccion);
-            stm.setInt(6, favorito);
+            stm.setString(6, usuario);
+            stm.setInt(7, favorito);
             
             int i = stm.executeUpdate();
             
@@ -58,7 +65,7 @@ public final class CrearContacto extends javax.swing.JFrame {
                 Contactos cont = new Contactos();
                 cont.setVisible(true);
                 this.dispose();
-                cont.cargarDatos();
+                cont.cargarDatos(usuario);
 
             } else {
                 JOptionPane.showMessageDialog(null, "ERROR");
@@ -74,9 +81,9 @@ public final class CrearContacto extends javax.swing.JFrame {
     public void limpiar(){
         txtMovil.setText("");
         txtDireccion.setText("");
-        txtMovil.setText("");
-        txtMovil.setText("");
-        txtMovil.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtEmail.setText("");
     }
     
     public void validacion(){
@@ -329,7 +336,7 @@ public final class CrearContacto extends javax.swing.JFrame {
         Contactos cont = new Contactos();
         cont.setVisible(true);
         this.dispose();
-        cont.cargarDatos();
+        cont.cargarDatos(usuario);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnLimpiarContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarContactoActionPerformed
