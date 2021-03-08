@@ -5,6 +5,7 @@
  */
 package contactos;
 
+import agenda.Agenda;
 import bd.Conexion;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -235,6 +236,11 @@ public final class Contactos extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnAgendaMouseExited(evt);
+            }
+        });
+        btnAgenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaActionPerformed(evt);
             }
         });
         PnlOpciones.add(btnAgenda, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 110, 30));
@@ -649,6 +655,13 @@ public final class Contactos extends javax.swing.JFrame {
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaActionPerformed
+        Agenda ag = new Agenda();
+        ag.cargarDatos(usuario);
+        ag.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgendaActionPerformed
 
    
     int xx,xy;

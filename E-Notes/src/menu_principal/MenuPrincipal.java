@@ -1,6 +1,7 @@
 
 package menu_principal;
 
+import agenda.Agenda;
 import java.awt.HeadlessException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -23,18 +24,18 @@ import login.Login;
  *
  * @author mnpra
  */
-public class MenuPrincipal extends javax.swing.JFrame {
+public final class MenuPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal() {
         initComponents();
-        //iconoFormulario();
+        iconoFormulario();
     }
     
     public void iconoFormulario() {
-        URL url = getClass().getResource("/imagenes.general/logo.png");
+        URL url = getClass().getResource("/imagenes/general/logo.png");
         ImageIcon icono_formulario = new ImageIcon(url);
         setIconImage(icono_formulario.getImage());
     }
@@ -45,6 +46,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         userr = usuario;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String fechaHoyS = format.format(fechaH);
+        System.out.println(fechaHoyS);
         try {
             String consulta = "SELECT A.NOTA,A.LUGAR,A.FECHA,A.HORA FROM AGENDA AS A WHERE A.FECHA='" + fechaHoyS + "'  AND A.NOMBRE_USUARIO='"+usuario+"'";
 
@@ -367,7 +369,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarSesionMouseExited
 
     private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaActionPerformed
-        
+        Agenda ag = new Agenda();
+        ag.cargarDatos(userr);
+        ag.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAgendaActionPerformed
 
     private void btnContactosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContactosActionPerformed
