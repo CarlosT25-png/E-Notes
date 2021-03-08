@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import login.Login;
 import menu_principal.MenuPrincipal;
+import reportes.Reportes;
 
 /**
  *
@@ -287,6 +288,11 @@ public final class Contactos extends javax.swing.JFrame {
                 btnReportesMouseExited(evt);
             }
         });
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
         PnlOpciones.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
 
         btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnCerrarSesion.png"))); // NOI18N
@@ -381,7 +387,6 @@ public final class Contactos extends javax.swing.JFrame {
         });
         ParentPanel.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, -1));
 
-        tblContactos.setBackground(new java.awt.Color(255, 255, 255));
         tblContactos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -411,13 +416,10 @@ public final class Contactos extends javax.swing.JFrame {
         ParentPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 540, 350));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Buscar:");
         ParentPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
-        txtBuscarContacto.setBackground(new java.awt.Color(255, 255, 255));
         txtBuscarContacto.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
-        txtBuscarContacto.setForeground(new java.awt.Color(0, 0, 0));
         txtBuscarContacto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarContactoKeyReleased(evt);
@@ -662,6 +664,13 @@ public final class Contactos extends javax.swing.JFrame {
         ag.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgendaActionPerformed
+
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        Reportes ventana = new Reportes();
+        ventana.setVisible(true);
+        ventana.addUser(usuario);
+        this.dispose();
+    }//GEN-LAST:event_btnReportesActionPerformed
 
    
     int xx,xy;

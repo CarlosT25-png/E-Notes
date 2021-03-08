@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3667885-de1d-4a45-85a8-ff3cbebd8100">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idUsuario" class="java.lang.String"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT A.NOTA AS DESCRIPCION,A.LUGAR,A.FECHA,A.HORA  FROM AGENDA AS A WHERE A.NOMBRE_USUARIO=$P{idUsuario} AND FECHA LIKE $P{fecha}]]>
+	</queryString>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="LUGAR" class="java.lang.String"/>
+	<field name="FECHA" class="java.lang.String"/>
+	<field name="HORA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="242" y="16" width="89" height="31" uuid="3eabf41b-ee65-4a65-88e0-f2823cd92047"/>
+				<textElement>
+					<font fontName="Segoe UI" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENotes]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="455" y="59" width="100" height="20" uuid="bf70d8d7-d8f8-48b0-8d58-a39b0678792d"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="84" height="69" uuid="40fb0cf2-ee3f-4d0e-a944-b9fd694fe1e4"/>
+				<imageExpression><![CDATA["C:\\Users\\carto\\OneDrive\\Documentos\\NetBeansProjects\\E-Notes\\E-Notes\\src\\reportes\\logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="15" width="100" height="20" uuid="9f044707-1108-4c30-9062-f1ab5074db43"/>
+				<textElement>
+					<font fontName="Segoe UI"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="266" y="0" width="34" height="20" uuid="1dd5d24f-adae-443d-82d2-c0470b3bc449"/>
+				<textElement>
+					<font fontName="Segoe UI" size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Citas]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="176" height="20" uuid="cde73a94-1bf4-45e8-b772-bd86ba05411c"/>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="0" width="150" height="20" uuid="eb07f626-9f72-4888-8acb-2bec261cd96d"/>
+				<text><![CDATA[LUGAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="0" width="100" height="20" uuid="44f1bb85-8256-40f0-b80f-32f4fc640945"/>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="0" width="100" height="20" uuid="85886e7b-cbf5-4798-bb92-6e71df520b3c"/>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="176" height="20" uuid="3b8491eb-d680-404f-8275-52822d146459"/>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="0" width="150" height="20" uuid="83e7c452-f85a-47ea-8084-6845ecad6308"/>
+				<textFieldExpression><![CDATA[$F{LUGAR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="0" width="100" height="20" uuid="c6f81f67-d76d-4c59-85b0-aaf15ad4abd2"/>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="431" y="0" width="100" height="20" uuid="8b9ebf13-933e-4683-9256-bb3e47114ba5"/>
+				<textFieldExpression><![CDATA[$F{HORA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="8" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="0" width="80" height="20" uuid="f041fa0f-ff0c-40cc-a461-04d30d80ca25"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="300" y="0" width="40" height="20" uuid="b5a5b215-19db-44e6-9256-fc02bab8886a"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="9" splitType="Stretch"/>
+	</summary>
+</jasperReport>

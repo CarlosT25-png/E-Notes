@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import login.Login;
 import menu_principal.MenuPrincipal;
+import reportes.Reportes;
 
 /**
  *
@@ -220,6 +221,11 @@ public final class Agenda extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnReportesMouseExited(evt);
+            }
+        });
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
             }
         });
         PnlOpciones.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
@@ -569,6 +575,13 @@ public final class Agenda extends javax.swing.JFrame {
     private void btnContactosMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContactosMouseExited
         btnContactos.setIcon(new ImageIcon(getClass().getResource("/imagenes/general/btnContactos.png")));
     }//GEN-LAST:event_btnContactosMouseExited
+
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        Reportes ventana = new Reportes();
+        ventana.setVisible(true);
+        ventana.addUser(usuario);
+        this.dispose();
+    }//GEN-LAST:event_btnReportesActionPerformed
 
     /**
      * @param args the command line arguments

@@ -19,6 +19,7 @@ import contactos.Contactos;
 import java.sql.SQLException;
 import javax.swing.table.TableColumnModel;
 import login.Login;
+import reportes.Reportes;
 
 /**
  *
@@ -44,7 +45,7 @@ public final class MenuPrincipal extends javax.swing.JFrame {
     public void llenarTablasMP(String usuario){
         Date fechaH = new Date();
         userr = usuario;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/M/d");
         String fechaHoyS = format.format(fechaH);
         System.out.println(fechaHoyS);
         try {
@@ -243,6 +244,11 @@ public final class MenuPrincipal extends javax.swing.JFrame {
                 btnReportesMouseExited(evt);
             }
         });
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportesActionPerformed(evt);
+            }
+        });
         PnlOpciones.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
 
         btnCerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/general/btnCerrarSesion.png"))); // NOI18N
@@ -387,6 +393,13 @@ public final class MenuPrincipal extends javax.swing.JFrame {
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        Reportes ventana = new Reportes();
+        ventana.setVisible(true);
+        ventana.addUser(userr);
+        this.dispose();
+    }//GEN-LAST:event_btnReportesActionPerformed
 
                                         
     public MenuPrincipal(JPanel ParentPanel, JPanel PnlOpciones, JButton btnAgenda, JButton btnCerrarSesion, JButton btnContactos, JButton btnMenuPrincipal, JButton btnReportes, JButton btnSalir, JLabel jLabel1, JLabel jLabel2, JPanel jPanel1, JLabel logo, JLabel txtUsuario) throws HeadlessException {
